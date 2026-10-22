@@ -6,8 +6,8 @@ services:
     plan: free
     buildCommand: pip install -r requirements.txt
     # One worker on purpose: junior and senior screens share live in-memory state.
-    startCommand: gunicorn server:app --workers 1 --threads 8 --timeout 60
-    healthCheckPath: /api/bootstrap
+    startCommand: gunicorn server:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120
+    healthCheckPath: /healthz
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.7

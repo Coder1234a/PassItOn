@@ -132,6 +132,12 @@ def index():
     return send_from_directory(app.static_folder, "index.html")
 
 
+@app.get("/healthz")
+def healthz():
+    # Cheap check for Render: answers as soon as the server is up.
+    return "ok"
+
+
 @app.get("/demo")
 def demo():
     # Junior and senior phones side by side, for presenting on a laptop or projector.
