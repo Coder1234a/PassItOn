@@ -1,6 +1,6 @@
 # PassItOn
 
-A VIT-only AI help network for ConvergeX 2026 (Track 4: AI for Society). A junior asks a question; AI agents answer it from seniors' tips, or match the junior with the right senior and set up the meeting.
+A VIT-only AI help network, built by team **oops** for ConvergeX 2026 (Track 4: AI for Society; Problem Statement 2: AI-Based Smart Campus Management, student services). A junior asks a question; AI agents answer it from seniors' tips, or match the junior with the right senior and set up the meeting.
 
 ## Run it (Windows, about 10 minutes)
 
