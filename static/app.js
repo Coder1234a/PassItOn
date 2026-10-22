@@ -145,6 +145,7 @@ async function startRole() {
   S.seenAccepted = null;
   S.seenRequests = null;
   renderChrome();
+  showTour(false);
   await poll();
   go(S.tab);
   clearInterval(S.pollTimer);
@@ -213,8 +214,10 @@ function go(tab) {
 
 function openAccount() {
   openSheet(`<div class="sheet-h"><h2>${esc(meName())}</h2>${closeBtn()}</div>
+    <button class="btn btn-ghost btn-block" id="replay" style="margin-bottom:10px">How PassItOn works</button>
     <button class="btn btn-ghost btn-block" id="switch">Switch to ${S.role === "senior" ? "junior" : "senior"} mode</button>
     <button class="btn btn-ghost btn-block" id="reset" style="margin-top:10px">Reset demo data</button>`);
+  $("#replay").onclick = () => { closeSheet(); showTour(true); };
   $("#switch").onclick = () => { closeSheet(); store("pio_role", null); store("pio_me", null); S.role = null; clearInterval(S.pollTimer); renderWelcome(); };
   $("#reset").onclick = async () => {
     await api("/api/reset", {});
@@ -488,6 +491,7 @@ async function viewSeniors() {
   $("#d-no").onclick = () => deckEl._fly && deckEl._fly(-1);
   $("#d-yes").onclick = () => deckEl._fly && deckEl._fly(1);
   $("#d-undo").onclick = () => { if (deckEl._undo) S.deckIdx = deckEl._undo(); };
+  swipeHint(deckEl, "Swipe right to ask", "Swipe left to skip");
 }
 
 function seniorCard(s) {
@@ -669,6 +673,7 @@ function viewQuestions() {
     el.outerHTML = `<div class="empty"><div class="big">🎉</div><h2>All caught up</h2><p>When the AI can't answer a junior, their question lands here.</p></div>`;
   });
   el.classList.add("qdeck");
+  swipeHint(el, "Swipe right to answer", "Swipe left to pass");
   el.querySelectorAll(".card").forEach((c) => c.classList.add("qcard"));
   new MutationObserver(() => el.querySelectorAll(".card").forEach((c) => c.classList.add("qcard"))).observe(el, { childList: true });
   $("#q-no").onclick = () => el._fly && el._fly(-1);
@@ -859,3 +864,74 @@ function setBadge(tab, n) {
 }
 
 boot();
+
+// ---------- first-time tutorial ----------
+const TOURS = {
+  junior: [
+    { art: "🙋", title: "Ask anything about VIT", text: "FFCS, CAT prep, clubs, hostel life. Answers come from seniors who've already been through it." },
+    { art: "swipe", title: "Swipe right to ask a senior", text: "Right means “help me”, left means skip. When a senior says yes, it's a match, and we suggest a time and place." },
+    { art: "🥼", title: "Grab what seniors pass on", text: "Lab coats, calculators, EG kits and hostel gear, mostly free. Request it and pick it up on campus." },
+  ],
+  senior: [
+    { art: "✍️", title: "Answer once, help every junior", text: "Questions the AI couldn't answer land here. Your answer becomes a tip that juniors get instantly from then on." },
+    { art: "swipe", title: "Say yes to juniors", text: "Juniors who swipe right on you show up in Requests. Accept, and they get a meeting time and place." },
+    { art: "🎁", title: "Pass it on, earn points", text: "List your old stuff in seconds. Answers, meet-ups and listings earn points towards café rewards." },
+  ],
+};
+
+function tourArt(art) {
+  // The swipe slide gets a tiny animated card instead of an emoji.
+  if (art !== "swipe") return `<div class="tour-art"><span>${art}</span></div>`;
+  const label = S.role === "senior" ? "ANSWER" : "ASK";
+  return `<div class="tour-art"><div class="mini-card"><b>${S.role === "senior" ? "?" : "A"}</b><i>${label}</i></div><span class="hand">👆</span></div>`;
+}
+
+function showTour(force) {
+  const key = `pio_tour_${S.role}`;
+  S.toured = S.toured || {};
+  if (!force && (store(key) || S.toured[S.role])) return;
+  S.toured[S.role] = true;
+  const slides = TOURS[S.role];
+  const el = $("#tour");
+  el.innerHTML = `<button class="tour-skip" id="tour-skip">Skip</button>
+    <div class="tour-track" id="tour-track">${slides.map((s) => `<section class="tour-slide">${tourArt(s.art)}<h1>${esc(s.title)}</h1><p>${esc(s.text)}</p></section>`).join("")}</div>
+    <div class="tour-foot"><div class="tour-dots">${slides.map((_, i) => `<i data-dot="${i}"></i>`).join("")}</div>
+      <button class="btn btn-primary btn-block" id="tour-next">Next</button></div>`;
+  el.hidden = false;
+  const track = $("#tour-track");
+  const at = () => Math.round(track.scrollLeft / track.clientWidth);
+  const sync = () => {
+    const i = at();
+    el.querySelectorAll("[data-dot]").forEach((d) => d.classList.toggle("on", Number(d.dataset.dot) === i));
+    $("#tour-next").textContent = i === slides.length - 1 ? "Let's go" : "Next";
+  };
+  const done = () => {
+    el.hidden = true; el.innerHTML = ""; store(key, "1");
+    const next = S.afterTour; S.afterTour = null;
+    if (next) next();
+  };
+  track.addEventListener("scroll", () => requestAnimationFrame(sync));
+  $("#tour-next").onclick = () => {
+    const i = at();
+    if (i >= slides.length - 1) done();
+    else track.scrollTo({ left: (i + 1) * track.clientWidth, behavior: "smooth" });
+  };
+  $("#tour-skip").onclick = done;
+  sync();
+  $("#tour-next").focus();
+}
+
+function swipeHint(deckEl, right, left) {
+  // One-time hand animation over the deck; gone on the first touch.
+  const key = `pio_hint_${S.role}`;
+  S.hinted = S.hinted || {};
+  if (store(key) || S.hinted[S.role] || !deckEl || !deckEl.querySelector(".card")) return;
+  if (!$("#tour").hidden) { S.afterTour = () => swipeHint($(deckEl.id ? "#" + deckEl.id : ".deck"), right, left); return; }
+  const hint = document.createElement("div");
+  hint.className = "swipe-hint";
+  hint.innerHTML = `<span class="hand">👆</span><p><b>${esc(right)}</b><br>${esc(left)}</p>`;
+  deckEl.appendChild(hint);
+  const gone = () => { hint.remove(); store(key, "1"); S.hinted[S.role] = true; };
+  hint.addEventListener("pointerdown", gone);
+  deckEl.addEventListener("pointerdown", gone, { once: true });
+}

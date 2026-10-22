@@ -330,6 +330,32 @@ textarea::placeholder, input::placeholder { color: var(--muted); }
 }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+/* ---------- tutorial ---------- */
+#tour { position: absolute; inset: 0; z-index: 25; display: flex; flex-direction: column; background: radial-gradient(900px 600px at 50% 0%, var(--plum-3), var(--night) 70%); animation: fade 0.25s; }
+.tour-skip { position: absolute; top: 16px; right: 18px; z-index: 2; padding: 8px 14px; border-radius: 999px; background: var(--plum-2); color: var(--soft); font-weight: 600; font-size: 14px; }
+.tour-track { flex: 1; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.tour-track::-webkit-scrollbar { display: none; }
+.tour-slide { flex: none; width: 100%; scroll-snap-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 30px 10px; }
+.tour-slide h1 { font-size: 30px; font-weight: 800; line-height: 1.1; margin-top: 34px; max-width: 14ch; }
+.tour-slide p { color: var(--soft); font-size: 17px; margin: 14px 0 0; max-width: 30ch; }
+.tour-art { position: relative; width: 200px; height: 200px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); box-shadow: 0 30px 80px -30px var(--accent-a); }
+.tour-art > span { font-size: 92px; }
+.tour-foot { padding: 14px 24px 30px; }
+.tour-dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 18px; }
+.tour-dots i { width: 8px; height: 8px; border-radius: 4px; background: var(--plum-3); transition: width 0.25s, background 0.25s; }
+.tour-dots i.on { width: 26px; background: var(--ink); }
+.mini-card { position: relative; width: 104px; height: 140px; border-radius: 18px; background: var(--night); display: grid; place-items: center; box-shadow: 0 16px 30px -10px rgba(0, 0, 0, 0.6); animation: wiggle 2.4s ease-in-out infinite; }
+.mini-card b { font-family: var(--display); font-weight: 800; font-size: 56px; color: var(--ink); }
+.mini-card i { position: absolute; top: 12px; left: 10px; font-style: normal; font-family: var(--display); font-weight: 800; font-size: 13px; color: var(--mint); border: 2px solid var(--mint); border-radius: 6px; padding: 1px 6px; transform: rotate(-12deg); animation: stampin 2.4s ease-in-out infinite; }
+.tour-art .hand { position: absolute; bottom: 18px; left: 50%; font-size: 40px; animation: hand 2.4s ease-in-out infinite; }
+.swipe-hint { position: absolute; inset: 0; z-index: 4; border-radius: var(--r-card); background: rgba(16, 10, 34, 0.55); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; transition: opacity 0.4s; }
+.swipe-hint.fade { opacity: 0; pointer-events: none; }
+.swipe-hint .hand { font-size: 56px; animation: hand 1.8s ease-in-out infinite; }
+.swipe-hint p { margin: 14px 0 0; font-size: 17px; color: var(--soft); }
+.swipe-hint b { color: var(--ink); font-size: 20px; font-family: var(--display); }
+@keyframes wiggle { 0%, 15% { transform: none; } 40%, 55% { transform: translateX(34px) rotate(10deg); } 80%, 100% { transform: none; } }
+@keyframes stampin { 0%, 25% { opacity: 0; } 40%, 55% { opacity: 1; } 75%, 100% { opacity: 0; } }
+@keyframes hand { 0%, 15% { transform: translateX(-30px); } 40%, 55% { transform: translateX(30px); } 80%, 100% { transform: translateX(-30px); } }
 @keyframes up { from { transform: translateY(100%); } to { transform: none; } }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes blink { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
