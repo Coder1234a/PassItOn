@@ -14,6 +14,11 @@ KEYWORDS = {
 }
 
 
+def _first_upper(s):
+    """Capitalise only the first letter, so 'fx-991ES' keeps its case."""
+    return s[:1].upper() + s[1:]
+
+
 def _rule_listing(text):
     t = (text or "").lower()
     category = "Other"
@@ -29,7 +34,7 @@ def _rule_listing(text):
     credits = {"Textbook": 20, "Drafting / EG kit": 30, "Lab coat": 15, "Calculator": 25,
                "Cycle": 80, "Hostel essentials": 15, "Electronics": 40}.get(category, 10)
     return {
-        "title": (text or "Item").strip()[:60].capitalize(),
+        "title": _first_upper((text or "Item").strip()[:60]),
         "category": category,
         "course": None,
         "condition": condition,
