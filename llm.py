@@ -6,6 +6,8 @@ agents fall back to simple rules. That way the demo never crashes on stage.
 import json
 import os
 import re
+import tomllib
+from pathlib import Path
 
 try:
     from google import genai
@@ -16,14 +18,14 @@ except Exception:  # library not installed
 
 
 def _secret(name):
-    """Read a setting from Streamlit secrets first, then environment variables."""
+    """Read a setting from the environment (Render), else from .streamlit/secrets.toml (your laptop)."""
+    if os.environ.get(name):
+        return os.environ[name]
+    path = Path(__file__).resolve().parent / ".streamlit" / "secrets.toml"
     try:
-        import streamlit as st
-        if name in st.secrets:
-            return st.secrets[name]
+        return tomllib.loads(path.read_text(encoding="utf-8")).get(name)
     except Exception:
-        pass
-    return os.environ.get(name)
+        return None
 
 
 def _parse_json(text):

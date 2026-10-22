@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PassItOn: live demo</title>
+  <style>
+    @font-face { font-family: "Bricolage Grotesque"; font-weight: 800; src: url("/static/fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Figtree"; font-weight: 500; src: url("/static/fonts/figtree-latin-500-normal.woff2") format("woff2"); }
+    :root { --night: #120C24; --ink: #F7F4FF; --muted: #9C92C6; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(1200px 700px at 50% -10%, #2C2160, var(--night) 60%) fixed; color: var(--ink);
+      font-family: "Figtree", system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 16px; box-sizing: border-box; }
+    .stage { display: flex; gap: 48px; align-items: flex-start; flex-wrap: wrap; justify-content: center; }
+    figure { margin: 0; text-align: center; }
+    figcaption { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 22px; margin-bottom: 12px; }
+    figcaption small { display: block; font-family: "Figtree", sans-serif; font-weight: 500; font-size: 14px; color: var(--muted); }
+    iframe { width: 390px; height: min(800px, calc(100vh - 110px)); border: 0; border-radius: 40px;
+      box-shadow: 0 0 0 10px #0B0717, 0 0 0 11px #3A2F66, 0 30px 90px rgba(0, 0, 0, 0.6); background: #1A1333; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <figure><figcaption>Rahul<small>first year, junior app</small></figcaption>
+      <iframe title="Junior app" src="/?role=junior&me=Rahul&embed=1"></iframe></figure>
+    <figure><figcaption>Arjun<small>3rd year, senior app</small></figcaption>
+      <iframe title="Senior app" src="/?role=senior&me=1&embed=1"></iframe></figure>
+  </div>
+</body>
+</html>

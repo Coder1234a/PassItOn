@@ -1,0 +1,17 @@
+# Render Blueprint: New > Blueprint > pick this repo. Paste your Gemini key when asked.
+services:
+  - type: web
+    name: passiton
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    # One worker on purpose: junior and senior screens share live in-memory state.
+    startCommand: gunicorn server:app --workers 1 --threads 8 --timeout 60
+    healthCheckPath: /api/bootstrap
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash-lite
+      - key: GEMINI_API_KEY
+        sync: false

@@ -102,7 +102,7 @@ class Orchestrator:
         return plan
 
     # ---------- Flow 3: the flywheel ----------
-    def add_to_kb(self, question, advice, senior_name, senior_year, course, topic):
+    def add_to_kb(self, question, advice, senior_name, senior_year, course, topic, save=True):
         tidy = None
         if self.llm.online:
             tidy = self.llm.text(
@@ -116,10 +116,11 @@ class Orchestrator:
                "senior_name": senior_name, "senior_year": senior_year, "approved": True, "sample": False}
         self.kb = pd.concat([self.kb, pd.DataFrame([row])], ignore_index=True)
         self.stats["kb_added"] += 1
-        try:
-            self.kb.to_csv(DATA / "knowledge.csv", index=False)
-        except Exception:
-            pass  # read-only hosting: it still lives in memory for this session
+        if save:
+            try:
+                self.kb.to_csv(DATA / "knowledge.csv", index=False)
+            except Exception:
+                pass  # read-only hosting: it still lives in memory for this session
         return row
 
     # ---------- Insights agent (Phase 2 preview) ----------

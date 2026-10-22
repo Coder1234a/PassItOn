@@ -1,74 +1,39 @@
 # PassItOn
 
-A VIT-only AI help network, built by team **oops** for ConvergeX 2026 (Track 4: AI for Society; Problem Statement 2: AI-Based Smart Campus Management, student services). A junior asks a question; AI agents answer it from seniors' tips, or match the junior with the right senior and set up the meeting.
+A VIT-only app where juniors get help from seniors, built by team **oops** for ConvergeX 2026 (Track 4: AI for Society; Problem Statement 2: AI-Based Smart Campus Management, student services).
 
-## Run it (Windows, about 10 minutes)
+- **Juniors:** ask anything and get a senior's tip instantly; swipe through seniors who can help (right = ask, left = skip); grab lab coats, calculators and hostel stuff from seniors in the market; see matches with a meeting time, place and a drafted message.
+- **Seniors:** swipe through questions the AI couldn't answer and answer them once (every later junior gets that answer instantly); accept or decline juniors who swiped right on them; pass on items with a photo; earn points towards rewards.
 
-1. Install Python 3.11 or newer from python.org. Tick **"Add Python to PATH"** during install.
-2. Unzip this folder, open it, click the address bar, type `cmd` and press Enter.
-3. Run:
-   ```
-   python -m venv venv
-   venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-4. (Optional but recommended) Turn the AI on: copy `.streamlit\secrets.toml.example` to `.streamlit\secrets.toml` and paste a free Gemini key from https://aistudio.google.com/apikey
-5. Start it:
-   ```
-   streamlit run app.py
-   ```
-   It opens in your browser at http://localhost:8501
+## Run it on a laptop (Windows)
 
-Mac/Linux: use `source venv/bin/activate` instead of `venv\Scripts\activate`.
+Double-click `run_demo.bat`. The first run installs everything (needs Python 3.11+ with "Add Python to PATH" ticked). It then opens:
 
-**No key? It still works.** Without a key the app runs in offline mode: the same flow, with rules instead of AI writing the answers. The sidebar shows which mode you're in.
+- `http://localhost:5000/demo`: junior and senior phones side by side, for presenting
+- `http://localhost:5000`: the app on its own (open it on a phone on the same hotspot using the address the window prints)
 
-## Try these
+Mac/Linux: `python -m venv venv && source venv/bin/activate && pip install -r requirements.txt && python server.py`
 
-- Ask: `DSA CAT is tomorrow and recursion confuses me` → instant answer from a senior's tip
-- Click **Still stuck? Talk to a senior** → senior cards → **Pick** → time, place and a drafted message
-- Ask: `how do I apply for a semester exchange abroad` → no tip covers it, so it hands off to seniors and lands in the **Senior inbox**
-- In **Senior inbox**, write an answer and approve it → ask the same question again → now answered instantly (the flywheel)
-- **Pass it on**: type `mini drafter used one semester` (or upload a photo) → listing + juniors who want it
-- **Insights**: real survey results (27 responses) and the questions the AI couldn't answer, grouped by course
-- **Under the hood**: every agent step for your last action
-- Ask: `please do my DA assignment` → refused by the Safety agent
+## Turn the AI on
 
-## Files
+Put your free key from https://aistudio.google.com/apikey in `.streamlit/secrets.toml` (copy the example file next to it). Check it with `python check_gemini.py`. Without a key the app runs on rules, with the same screens and flow.
 
-| File | What it is | Owner |
-|---|---|---|
-| `app.py` | All the screens | Shravya |
-| `agents/orchestrator.py` | Runs agents in order, records the trace | Anikeit |
-| `agents/intake.py` | Safety check + understanding the question | Anikeit |
-| `agents/ask.py` | Answers from seniors' tips, decides confidence | Anikeit |
-| `agents/match.py` | Ranks seniors | Rishika |
-| `agents/coordination.py` | Picks a slot and spot, drafts the message | Aditya |
-| `agents/listing.py` | Photo/text to listing, matches juniors | Aditya |
-| `llm.py` | Gemini wrapper with safe fallbacks | Anikeit |
-| `retrieval.py` | Text similarity search | Rishika |
-| `eval.py` | Accuracy test → numbers for the slides | Rishika |
-| `data/knowledge.csv` | Senior tips (**replace samples with real ones**) | Rishika |
-| `data/seniors.csv` | Senior profiles (**replace samples with real ones**) | Rishika |
-| `data/wanted.csv` | Juniors' "looking for" requests | Rishika |
-| `data/places.csv` | Campus meeting spots | Rishika |
-| `data/test_questions.csv` | 47 questions for `eval.py` (41 covered, 6 off-topic) | Rishika |
-| `data/survey/` | Survey: real (anonymised), synthetic, combined, summary | Rishika |
+## Deploy free on Render
 
-## Measure it
+New > Blueprint > pick this repo (it reads `render.yaml`) > paste the Gemini key when asked. Free instances sleep after about 15 idle minutes, so open the link a minute before you demo.
 
-```
-python eval.py
-```
-Prints how often the right tip ranks first and whether out-of-scope questions are handed off. Try another threshold with `python eval.py 0.25`.
+## How it works
 
-## Deploy (free)
+| Piece | What it does |
+|---|---|
+| `static/` | The phone app (HTML, CSS, JS, bundled fonts) |
+| `server.py` | Serves the app and a small JSON API; keeps live state shared by both phones |
+| `agents/intake.py` | Safety (blocks cheating) and understanding the question |
+| `agents/ask.py` | Answers only from seniors' tips; hands off when not confident |
+| `agents/match.py` | Ranks seniors: course done, topic fit, rating, reply rate, free soon |
+| `agents/coordination.py` | Picks a time and campus spot, drafts the message |
+| `agents/listing.py` | Photo or text to a listing, matched to juniors who want it |
+| `agents/orchestrator.py` | Runs the agents in order and records the trace ("How the AI got this") |
+| `eval.py` | Accuracy test: `python eval.py` |
 
-Push the folder to a GitHub repo (the `.gitignore` keeps your key out), then go to https://share.streamlit.io, pick the repo and `app.py`, and paste the key under **Advanced settings → Secrets** in the same format as the example file.
-
-## Notes
-
-- All 40 tips and 10 senior profiles are placeholders (`sample = True` in `knowledge.csv`). Replace them with real seniors' tips (with permission). Tips added through the Senior inbox are saved with `sample = False`.
-- Survey: only `survey_real_anonymised.csv` is real (27 responses). `survey_synthetic.csv` is simulated from the real answer patterns for testing; never quote it as survey results. The Insights tab shows real data unless you switch on "Include simulated responses".
-- Phone numbers in `seniors.csv` are optional. If filled (country code, no `+`, e.g. `919876543210`), the app shows an **Open in WhatsApp** button.
-- Edits made in the Senior inbox are saved to `data/knowledge.csv` when running locally.
+All seniors, tips and listings in `data/` are samples for the demo. Survey results (27 real responses) are in `data/survey/`.

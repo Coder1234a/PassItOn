@@ -1,0 +1,15 @@
+id,title,category,emoji,condition,price,seller_id,course,description,sample
+1,"Lab coat, size M",Lab coat,🥼,Good,0,6,Engineering Chemistry,"Washed and ironed, used for two semesters of chem lab.",True
+2,"Lab coat, size L",Lab coat,🥼,Like new,0,4,Engineering Physics,Worn maybe five times. Name tag removed.,True
+3,Casio fx-991ES Plus,Calculator,🔢,Good,250,5,Calculus,"Allowed in CAT and FAT. New battery, cover included.",True
+4,Casio fx-82MS,Calculator,🔢,Fair,0,10,Calculus,"Works fine, a few scratches on the case.",True
+5,Mini drafter + set squares,Drafting / EG kit,📐,Good,150,4,Engineering Graphics,"Full EG kit: mini drafter, set squares, clips and a sheet holder.",True
+6,EG sheets (A2) and pencils,Drafting / EG kit,📐,Like new,0,10,Engineering Graphics,12 unused A2 sheets plus HB and 2H pencils.,True
+7,Single mattress,Hostel essentials,🛏️,Good,400,8,,"Fits the hostel cot, aired out, no stains.",True
+8,"Bucket, mug and hangers",Hostel essentials,🪣,Good,0,2,,"Everything you need on day one, kept clean.",True
+9,"Extension board, 4 sockets",Hostel essentials,🔌,Like new,100,1,,Surge protected with a 2 m cable.,True
+10,Hero Sprint cycle,Cycle,🚲,Good,1800,9,,"New tyres last semester, lock included. Saves 15 minutes between SJT and TT.",True
+11,Introduction to Algorithms (CLRS),Textbook,📘,Good,300,1,Data Structures and Algorithms,"3rd edition, light pencil notes on the trees chapters.",True
+12,Calculus notes + past CAT papers,Textbook,📗,Good,0,5,Calculus,Handwritten notes for every module plus 6 past CAT papers.,True
+13,Arduino Uno starter kit,Electronics,🔧,Good,500,8,Clubs and Campus Life,"Board, breadboard, jumper wires and sensors. Great for your first hackathon.",True
+14,Study table lamp,Hostel essentials,💡,Like new,150,7,,"LED with 3 brightness levels, USB powered.",True
