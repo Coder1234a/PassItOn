@@ -1,0 +1,125 @@
+{
+  "IMPORTANT": "Quote ONLY 'real' numbers in slides and to judges. Synthetic rows are simulated from the real answer distributions for testing and illustration, and must be labelled as simulated if shown.",
+  "real": {
+    "label": "real responses only",
+    "responses_total": 27,
+    "first_years": 24,
+    "seniors": 3,
+    "first_years_needing_help_2plus_per_month": 20,
+    "first_years_needing_help_2plus_per_month_pct": 83,
+    "ease_finding_senior_avg_1to5": 2.88,
+    "found_it_hard_1or2": 8,
+    "found_it_hard_1or2_pct": 33,
+    "usefulness_avg_1to5": 4.46,
+    "rated_useful_4or5": 20,
+    "rated_useful_4or5_pct": 83,
+    "rated_useful_5": 15,
+    "want_it_free": 17,
+    "want_it_free_pct": 71,
+    "would_pay_something": 7,
+    "help_with": {
+      "FFCS: choosing slots, courses or timetable": 18,
+      "Exam prep (CAT / FAT, past papers, what to focus on)": 17,
+      "Projects, clubs or hackathons": 16,
+      "Hostel / mess / campus life": 14,
+      "Internships, coding prep or career direction": 12,
+      "Buying things I need (books, EG kit, lab coat, calculator, cycle, etc.)": 6,
+      "Lab work, records or viva": 4,
+      "Understanding a subject / concept": 3
+    },
+    "looked_where": {
+      "A senior I already knew": 17,
+      "ChatGPT or other AI": 11,
+      "YouTube / internet": 10,
+      "WhatsApp / Telegram groups": 8,
+      "Faculty / proctor": 5,
+      "Club seniors": 2,
+      "I didn't find help": 2
+    },
+    "bought_new": {
+      "Lab coat": 14,
+      "Scientific calculator": 13,
+      "Mattress / bucket / hostel essentials": 10,
+      "Engineering Graphics / drafting kit": 6,
+      "Textbooks": 5,
+      "Cycle": 3,
+      "None of these": 3
+    },
+    "seniors_would_answer_weekly_plus": 3,
+    "senior_motivation": {
+      "Just helping out": 2,
+      "Recognition from VIT or clubs": 2,
+      "Food / café coupons": 2,
+      "A verified \"Mentor\" profile / certificate for my resume or LinkedIn": 1,
+      "Credits I can use to get things from other students": 1,
+      "Money for 1-on-1 tutoring": 0
+    },
+    "left_contact_for_early_access": 3
+  },
+  "combined_real_plus_synthetic": {
+    "label": "real + synthetic (simulated, do not quote as survey results)",
+    "responses_total": 107,
+    "first_years": 84,
+    "seniors": 23,
+    "first_years_needing_help_2plus_per_month": 69,
+    "first_years_needing_help_2plus_per_month_pct": 82,
+    "ease_finding_senior_avg_1to5": 2.81,
+    "found_it_hard_1or2": 30,
+    "found_it_hard_1or2_pct": 36,
+    "usefulness_avg_1to5": 4.35,
+    "rated_useful_4or5": 68,
+    "rated_useful_4or5_pct": 81,
+    "rated_useful_5": 49,
+    "want_it_free": 56,
+    "want_it_free_pct": 67,
+    "would_pay_something": 28,
+    "help_with": {
+      "Exam prep (CAT / FAT, past papers, what to focus on)": 59,
+      "FFCS: choosing slots, courses or timetable": 57,
+      "Hostel / mess / campus life": 52,
+      "Projects, clubs or hackathons": 49,
+      "Internships, coding prep or career direction": 40,
+      "Buying things I need (books, EG kit, lab coat, calculator, cycle, etc.)": 24,
+      "Lab work, records or viva": 17,
+      "Understanding a subject / concept": 11
+    },
+    "looked_where": {
+      "A senior I already knew": 52,
+      "YouTube / internet": 32,
+      "ChatGPT or other AI": 27,
+      "WhatsApp / Telegram groups": 23,
+      "Faculty / proctor": 17,
+      "I didn't find help": 17,
+      "Club seniors": 8
+    },
+    "bought_new": {
+      "Lab coat": 47,
+      "Scientific calculator": 42,
+      "Mattress / bucket / hostel essentials": 27,
+      "None of these": 17,
+      "Textbooks": 15,
+      "Engineering Graphics / drafting kit": 14,
+      "Cycle": 11
+    },
+    "seniors_would_answer_weekly_plus": 17,
+    "senior_motivation": {
+      "Food / café coupons": 18,
+      "Recognition from VIT or clubs": 14,
+      "Just helping out": 13,
+      "Credits I can use to get things from other students": 13,
+      "A verified \"Mentor\" profile / certificate for my resume or LinkedIn": 6,
+      "Money for 1-on-1 tutoring": 4
+    },
+    "left_contact_for_early_access": 3
+  },
+  "frustration_quotes_real": [
+    "Everyone assumes you'll figure it out yourself.",
+    "Social Anxiety ",
+    "Finding whom to ask for help",
+    "No one person knows everything completely. ",
+    "everyone gives different advice",
+    "It's not when you're a fresher, rather it's before when you come here, there are a lot of unknowns and for that one needs help.",
+    "not knowing which direction to move forward in ",
+    "no contacts with ppl who have an actual idea of what's going on and what to do"
+  ]
+}

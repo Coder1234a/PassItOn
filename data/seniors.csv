@@ -1,0 +1,11 @@
+id,name,year,branch,courses_done,strengths,rating,response_rate,availability,preferred_spot,phone
+1,Arjun,3rd year,CSE,Data Structures and Algorithms;Problem Solving and Programming,"recursion, trees, linked lists, competitive programming",4.8,0.9,Mon 18:00;Wed 18:00;Sat 11:00,Central Library,
+2,Meera,2nd year,CSE (AI & Data Eng.),Data Structures and Algorithms;Calculus,"linked lists, pointers, time management",4.6,0.85,Tue 17:30;Thu 17:30,SJT ground floor,
+3,Karthik,4th year,ECE,FFCS;Engineering Physics,"FFCS timetable planning, slot clashes, choosing courses",4.9,0.7,Fri 19:00;Sun 16:00,TT ground floor,
+4,Divya,2nd year,Mechanical,Engineering Graphics;Engineering Physics,"EG sheets, projections, drafter use",4.7,0.95,Mon 16:30;Thu 16:30;Sat 10:00,Main Building lawn,
+5,Rohan,3rd year,CSE (Data Science),Calculus;Engineering Chemistry,"integration, differential equations, exam strategy",4.4,0.8,Wed 19:00;Sat 15:00,Central Library,
+6,Sneha,2nd year,Biotech,Engineering Physics;Engineering Chemistry,"lab viva, lab records, experiments",4.5,0.9,Tue 18:00;Fri 17:00,SJT ground floor,
+7,Aditi,3rd year,CSE,Problem Solving and Programming;Data Structures and Algorithms,"C and Python basics, debugging, lab exams",4.7,0.75,Mon 19:30;Thu 19:30,TT ground floor,
+8,Nikhil,4th year,EEE,Clubs and Campus Life;Internships and Careers,"hackathons, clubs, building projects",4.3,0.6,Sat 12:00;Sun 12:00,Main Building lawn,
+9,Priya,4th year,CSE,Internships and Careers;Problem Solving and Programming,"resumes, internships, interview prep",4.8,0.65,Sun 17:00,Central Library,
+10,Vikram,3rd year,Mechanical,Engineering Graphics;Calculus,"projections, sections, calculus doubts",4.2,0.85,Tue 16:00;Fri 16:00,Main Building lawn,
