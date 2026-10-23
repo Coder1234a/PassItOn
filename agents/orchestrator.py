@@ -1,3 +1,4 @@
+
 """Orchestrator: decides which agents run, in what order, and records a trace
 so we can show the jury exactly what happened ("Under the hood" tab)."""
 import time
@@ -52,12 +53,29 @@ class Orchestrator:
         trace = Trace()
         self.stats["questions"] += 1
 
+        # Safety + relevance filter runs before intake, retrieval, and matching.
         t = time.time()
-        allowed, reason = intake.safety_check(question, self.llm)
-        trace.add("Safety", "allowed" if allowed else "blocked", reason, t)
-        if not allowed:
+        check = intake.classify_request(question)
+
+        status = check["status"]
+        reason = check["reason"]
+        category = check["category"]
+
+        trace.add(
+            "Safety",
+            status,
+            f"Category: {category}. {reason}",
+            t
+        )
+
+        if status != "allowed":
             self.stats["blocked"] += 1
-            return {"status": "blocked", "message": reason, "trace": trace.steps}
+            return {
+                "status": status,
+                "message": reason,
+                "category": category,
+                "trace": trace.steps
+            }
 
         t = time.time()
         info = intake.intake(question, self.courses, self.llm)
