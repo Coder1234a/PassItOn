@@ -14,6 +14,13 @@ BLOCK_PATTERNS = [
     r"\b(buy|sell)\b.{0,15}\b(assignment|records?)\b",
 ]
 
+OUT_OF_SCOPE_PATTERNS = [
+    r"\b(movie|movies|film|films)\b.{0,30}\b(recommend|suggest|watch)\b",
+    r"\b(makeout|make-out)\s+spots?\b",
+    r"\b(date|dating)\s+spots?\b",
+    r"\b(weekend)\s+(fun|plans|activities)\b",
+]
+
 REFUSAL = (
     "PassItOn can't help with doing graded work, leaks or proxies. "
     "Ask how to approach it instead, and we'll find you tips or a senior who can explain it."
@@ -55,6 +62,16 @@ def safety_check(question, llm=None):
     if len(q.strip()) < 4:
         return False, "Please type a full question so we can help."
     return True, ""
+    
+    for pattern in OUT_OF_SCOPE_PATTERNS:
+        if re.search(pattern, q):
+            return False, (
+                "PassItOn focuses on academic support and "
+                "useful college resources. Try asking about "
+                "study tips, campus facilities, clubs, or "
+                "student opportunities instead."
+            )
+
 
 
 def _rule_intake(question, courses):
