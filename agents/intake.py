@@ -19,8 +19,9 @@ BLOCK_PATTERNS = [
 # These are checked separately from academic integrity violations.
 OUT_OF_SCOPE_PATTERNS = [
     r"\b(movie|movies|film|films)\b.{0,30}\b(recommend|suggest|watch)\b",
-    r"\b(makeout|make-out)\s+spots?\b",
-    r"\b(date|dating)\s+spots?\b",
+    r"\b(recommend|suggest)\w*\b.{0,30}\b(movies?|films?|web ?series)\b",
+    r"\bmake[\s-]?out\s+(spots?|places?)\b",
+    r"\b(date|dating)\s+(spots?|places?|ideas?)\b",
     r"\b(weekend)\s+(fun|plans|activities)\b",
 ]
 
