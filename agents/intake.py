@@ -6,9 +6,11 @@
 """
 import re
 
+from agents import content_filter
+
 # Quick rule-based check. Runs even without the AI, so it costs nothing.
+# ("do my DA" on its own is no longer here: content_filter.py tells "can you do my DA" from "how do I do my DA".)
 BLOCK_PATTERNS = [
-    r"\b(do|write|solve|complete|finish|make)\s+(my|our|this)\b.{0,25}\b(assignment|da|record|lab record|project|homework)s?\b",
     r"\b(assignment|da|record|homework)s?\b.{0,25}\bfor me\b",
     r"\b(answer key|leaked? (paper|question)|paper leak)\b",
     r"\bproxy\b.{0,15}\battendance\b",
@@ -63,8 +65,28 @@ ALIASES = {
 TYPES = ["concept", "exam", "ffcs", "lab", "project", "career", "campus", "item", "other"]
 
 
-def classify_request(question):
+def _gemini_classifier(llm):
+    """Gemini as the grey-zone judge; returns None when the AI is offline (the filter then uses rules)."""
+    if llm is None or not llm.online:
+        return None
+
+    def classify(text):
+        reply = llm.text(content_filter.CLASSIFIER_PROMPT.format(text=text)) or "ok"
+        words = reply.strip().lower().split()
+        return words[0].strip(".,") if words else "ok"
+    return classify
+
+
+def classify_request(question, retrieval_score=None, llm=None):
     """Sort a question into allowed / blocked / out_of_scope, with a category and a reason."""
+    # 0. The content filter: vulgar, cheating, leisure and off-topic, cheapest check first.
+    check = content_filter.check_content(question, kind="question", retrieval_score=retrieval_score,
+                                         llm_classify=_gemini_classifier(llm))
+    if not check["allowed"]:
+        hard_no = check["category"] in ("vulgar", "cheating", "too_short")
+        return {"status": "blocked" if hard_no else "out_of_scope",
+                "category": check["category"], "reason": check["message"]}
+
     q = question.lower()
 
     # 1. Block academic dishonesty and other prohibited requests first.

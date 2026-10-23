@@ -181,9 +181,13 @@ function renderWelcome() {
     </div>`;
   $("#pick-junior").onclick = () => { $("#junior-name").hidden = false; $("#senior-who").hidden = true; $("#jname").focus(); };
   $("#pick-senior").onclick = () => { $("#senior-who").hidden = false; $("#junior-name").hidden = true; };
-  const startJunior = () => {
+  const startJunior = async () => {
     const name = $("#jname").value.trim().replace(/\s+/g, " ");
     if (!name) { toast("Add your first name so seniors know who's asking"); $("#jname").focus(); return; }
+    try {
+      const v = await api("/api/check_name", { name });
+      if (!v.allowed) { toast(v.message); $("#jname").focus(); return; }
+    } catch (e) { /* server unreachable: let them in, the server checks again later */ }
     setRole("junior", name);
   };
   $("#go-junior").onclick = startJunior;
@@ -410,8 +414,10 @@ async function runAsk() {
     const r = await api("/api/ask", { question, me: S.me });
     if (!$("#q-out")) return; // sheet was closed while waiting
     if (r.status === "blocked") {
-      const heading = { off_topic: "That's outside PassItOn", too_short: "Add a bit more detail" }[r.category] || "Can't help with that one";
-      out.innerHTML = `<div class="notice ${r.category === "academic_integrity" ? "bad" : ""}"><b>${heading}</b><p style="margin:6px 0 0">${esc(r.message)}</p></div>`;
+      const heading = { off_topic: "That's outside PassItOn", leisure: "That's outside PassItOn",
+        too_short: "Add a bit more detail", vulgar: "Let's keep it respectful" }[r.category] || "Can't help with that one";
+      const serious = ["academic_integrity", "cheating", "vulgar"].includes(r.category);
+      out.innerHTML = `<div class="notice ${serious ? "bad" : ""}"><b>${heading}</b><p style="margin:6px 0 0">${esc(r.message)}</p></div>`;
       return;
     }
     const deckBtn = `<button class="btn ${r.answer.confident ? "btn-ghost" : "btn-primary"} btn-block" style="margin-top:14px" id="to-deck">${r.answer.confident ? "Still stuck? Swipe seniors who can help" : "Swipe seniors who can help"}</button>`;

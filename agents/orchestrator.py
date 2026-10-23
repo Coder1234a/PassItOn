@@ -55,7 +55,11 @@ class Orchestrator:
 
         # Safety + relevance filter runs before intake, retrieval, and matching.
         t = time.time()
-        check = intake.classify_request(question)
+        # A question with no campus words can still pass if a senior tip matches it closely.
+        def best_tip_score():
+            tips = ask.retrieve(question, self.kb, {})
+            return tips[0]["score"] if tips else 0.0
+        check = intake.classify_request(question, retrieval_score=best_tip_score, llm=self.llm)
 
         status = check["status"]
         reason = check["reason"]

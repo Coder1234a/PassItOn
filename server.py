@@ -16,6 +16,7 @@ from pathlib import Path
 import pandas as pd
 from flask import Flask, jsonify, request, send_from_directory
 
+from agents import content_filter
 from agents import intake as intake_agent
 from agents import match
 from agents.coordination import next_slots
@@ -193,6 +194,16 @@ def deck():
         return jsonify([store.public_senior(store.senior(r["id"]), r) for r in ranked])
 
 
+@app.post("/api/check_name")
+def check_name():
+    # The welcome screen checks a junior's first name before using it anywhere.
+    name = str(body().get("name", "")).strip()[:30]
+    verdict = content_filter.check_content(name, kind="name")
+    return jsonify({"allowed": verdict["allowed"] and len(name) >= 2,
+                    "message": "Pick a name without those words." if not verdict["allowed"]
+                    else "Add your first name so seniors know who's asking."})
+
+
 @app.post("/api/request")
 def request_senior():
     data = body()
@@ -271,6 +282,9 @@ def answer():
     advice = str(data.get("advice", "")).strip()[:1500]
     if len(advice) < 10:
         return jsonify({"error": "Write at least a sentence so juniors can use it."}), 400
+    verdict = content_filter.check_content(advice, kind="answer")
+    if not verdict["allowed"]:
+        return jsonify({"error": verdict["message"]}), 400
     with store.lock:
         q = next((x for x in store.questions if str(x["id"]) == str(data.get("question_id"))), None)
         senior = store.senior(data.get("senior_id"))
@@ -299,6 +313,10 @@ def listing():
             image = None
     if not text and not image:
         return jsonify({"error": "Add a photo or a line about the item."}), 400
+    if text:
+        verdict = content_filter.check_content(text, kind="listing")
+        if not verdict["allowed"]:
+            return jsonify({"error": verdict["message"]}), 400
     if not text and not store.orc.llm.online:
         return jsonify({"error": "Add a line about it too. Reading photos needs the AI, which is offline right now."}), 400
     with store.lock:
