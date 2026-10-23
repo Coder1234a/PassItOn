@@ -5,23 +5,6 @@ A VIT-only app where juniors get help from seniors, built by team **oops** for C
 - **Juniors:** ask anything and get a senior's tip instantly; swipe through seniors who can help (right = ask, left = skip); grab lab coats, calculators and hostel stuff from seniors in the market; see matches with a meeting time, place and a drafted message.
 - **Seniors:** swipe through questions the AI couldn't answer and answer them once (every later junior gets that answer instantly); accept or decline juniors who swiped right on them; pass on items with a photo; earn points towards rewards.
 
-## Run it on a laptop (Windows)
-
-Double-click `run_demo.bat`. The first run installs everything (needs Python 3.11+ with "Add Python to PATH" ticked). It then opens:
-
-- `http://localhost:5000/demo`: junior and senior phones side by side, for presenting
-- `http://localhost:5000`: the app on its own (open it on a phone on the same hotspot using the address the window prints)
-
-Mac/Linux: `python -m venv venv && source venv/bin/activate && pip install -r requirements.txt && python server.py`
-
-## Turn the AI on
-
-Put your free key from https://aistudio.google.com/apikey in `.streamlit/secrets.toml` (copy the example file next to it). Check it with `python check_gemini.py`. Without a key the app runs on rules, with the same screens and flow.
-
-## Deploy free on Render
-
-New > Blueprint > pick this repo (it reads `render.yaml`) > paste the Gemini key when asked. Free instances sleep after about 15 idle minutes, so open the link a minute before you demo.
-
 ## How it works
 
 | Piece | What it does |
