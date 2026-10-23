@@ -1,3 +1,4 @@
+
 """Safety + Intake agent.
 
 1. Safety: refuse cheating and abuse before anything else runs.
@@ -14,6 +15,8 @@ BLOCK_PATTERNS = [
     r"\b(buy|sell)\b.{0,15}\b(assignment|records?)\b",
 ]
 
+# Requests unrelated to academic support or useful college resources.
+# These are checked separately from academic integrity violations.
 OUT_OF_SCOPE_PATTERNS = [
     r"\b(movie|movies|film|films)\b.{0,30}\b(recommend|suggest|watch)\b",
     r"\b(makeout|make-out)\s+spots?\b",
@@ -24,6 +27,12 @@ OUT_OF_SCOPE_PATTERNS = [
 REFUSAL = (
     "PassItOn can't help with doing graded work, leaks or proxies. "
     "Ask how to approach it instead, and we'll find you tips or a senior who can explain it."
+)
+
+OUT_OF_SCOPE_REFUSAL = (
+    "PassItOn focuses on academic support and useful college resources. "
+    "Try asking about study tips, campus facilities, clubs, FFCS, "
+    "student opportunities, or items you need for college instead."
 )
 
 # Shortcuts students actually type. Add more as you see them.
@@ -56,22 +65,23 @@ TYPES = ["concept", "exam", "ffcs", "lab", "project", "career", "campus", "item"
 def safety_check(question, llm=None):
     """Returns (allowed, reason)."""
     q = question.lower()
+
+    # 1. Block academic dishonesty and other prohibited requests first.
     for pattern in BLOCK_PATTERNS:
         if re.search(pattern, q):
             return False, REFUSAL
+
+    # 2. Reject empty or extremely short questions.
     if len(q.strip()) < 4:
         return False, "Please type a full question so we can help."
-    return True, ""
-    
+
+    # 3. Flag requests unrelated to the app's purpose.
     for pattern in OUT_OF_SCOPE_PATTERNS:
         if re.search(pattern, q):
-            return False, (
-                "PassItOn focuses on academic support and "
-                "useful college resources. Try asking about "
-                "study tips, campus facilities, clubs, or "
-                "student opportunities instead."
-            )
+            return False, OUT_OF_SCOPE_REFUSAL
 
+    # 4. Allow requests that pass the checks above.
+    return True, ""
 
 
 def _rule_intake(question, courses):
