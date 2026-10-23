@@ -159,11 +159,13 @@ def ask():
     question = str(data.get("question", "")).strip()[:500]
     me = str(data.get("me", "A junior"))[:40]
     if len(question) < 4:
-        return jsonify({"status": "blocked", "message": "Type a full question so seniors know what you need."})
+        return jsonify({"status": "blocked", "category": "too_short",
+                        "message": "Type a full question so seniors know what you need."})
     with store.lock:
         result = store.orc.handle_question(question, DEFAULT_THRESHOLD)
-        if result["status"] == "blocked":
-            return jsonify({"status": "blocked", "message": result["message"], "trace": result["trace"]})
+        if result["status"] != "ok":  # blocked, out_of_scope, or any future refusal
+            return jsonify({"status": "blocked", "message": result["message"],
+                            "category": result.get("category"), "trace": result["trace"]})
         info = result["intake"]
         ranked = match.rank_seniors(question, info, store.orc.seniors, k=6)
         deck = [store.public_senior(store.senior(r["id"]), r) for r in ranked]

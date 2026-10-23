@@ -410,7 +410,8 @@ async function runAsk() {
     const r = await api("/api/ask", { question, me: S.me });
     if (!$("#q-out")) return; // sheet was closed while waiting
     if (r.status === "blocked") {
-      out.innerHTML = `<div class="notice bad"><b>Can't help with that one</b><p style="margin:6px 0 0">${esc(r.message)}</p></div>`;
+      const heading = { off_topic: "That's outside PassItOn", too_short: "Add a bit more detail" }[r.category] || "Can't help with that one";
+      out.innerHTML = `<div class="notice ${r.category === "academic_integrity" ? "bad" : ""}"><b>${heading}</b><p style="margin:6px 0 0">${esc(r.message)}</p></div>`;
       return;
     }
     const deckBtn = `<button class="btn ${r.answer.confident ? "btn-ghost" : "btn-primary"} btn-block" style="margin-top:14px" id="to-deck">${r.answer.confident ? "Still stuck? Swipe seniors who can help" : "Swipe seniors who can help"}</button>`;

@@ -63,26 +63,33 @@ ALIASES = {
 TYPES = ["concept", "exam", "ffcs", "lab", "project", "career", "campus", "item", "other"]
 
 
-def safety_check(question, llm=None):
-    """Returns (allowed, reason)."""
+def classify_request(question):
+    """Sort a question into allowed / blocked / out_of_scope, with a category and a reason."""
     q = question.lower()
 
     # 1. Block academic dishonesty and other prohibited requests first.
     for pattern in BLOCK_PATTERNS:
         if re.search(pattern, q):
-            return False, REFUSAL
+            return {"status": "blocked", "category": "academic_integrity", "reason": REFUSAL}
 
     # 2. Reject empty or extremely short questions.
     if len(q.strip()) < 4:
-        return False, "Please type a full question so we can help."
+        return {"status": "blocked", "category": "too_short",
+                "reason": "Please type a full question so we can help."}
 
     # 3. Flag requests unrelated to the app's purpose.
     for pattern in OUT_OF_SCOPE_PATTERNS:
         if re.search(pattern, q):
-            return False, OUT_OF_SCOPE_REFUSAL
+            return {"status": "out_of_scope", "category": "off_topic", "reason": OUT_OF_SCOPE_REFUSAL}
 
     # 4. Allow requests that pass the checks above.
-    return True, ""
+    return {"status": "allowed", "category": "campus_help", "reason": ""}
+
+
+def safety_check(question, llm=None):
+    """Older yes/no form of classify_request: returns (allowed, reason)."""
+    check = classify_request(question)
+    return check["status"] == "allowed", check["reason"]
 
 
 def _rule_intake(question, courses):
